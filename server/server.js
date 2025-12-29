@@ -1,41 +1,26 @@
 // server.js
+// Load environment variables FIRST before any other requires
+require("dotenv").config();
+
+const db = require("./db");
 const express = require("express");
 const cors = require("cors");
-const mysql = require("mysql2");
 const bcrypt = require("bcryptjs");
 const PDFDocument = require("pdfkit");
-
-const dotenv = require("dotenv");
-
-dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+const PORT = process.env.PORT || 5000;
 
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 
 /* ============================================================
    DATABASE CONNECTION
-============================================================ */
-
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.MYSQLDATABASE,
-  port: Number(process.env.DB_PORT),
-});
-
-
-db.connect((err) => {
-  if (err) {
-    console.error("❌ DB ERROR:", err);
-  } else {
-    console.log("✅ Connected to Railway MySQL");
-  }
-});
 
 /* ============================================================
    HELPER
@@ -2232,6 +2217,3 @@ process.on('uncaughtException', (error) => {
 /* ============================================================
    START SERVER
 ============================================================ */
-app.listen(PORT, () => {
-  console.log(`🔥 Server running on http://localhost:${PORT}`);
-});
