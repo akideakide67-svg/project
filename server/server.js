@@ -5,43 +5,36 @@ const mysql = require("mysql2");
 const bcrypt = require("bcryptjs");
 const PDFDocument = require("pdfkit");
 
+const dotenv = require("dotenv");
+
+dotenv.config();
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 5050;
+
 
 
 /* ============================================================
    DATABASE CONNECTION
 ============================================================ */
-// const db = mysql.createConnection({
-//   host: "127.0.0.1",
-//   user: "root",
-//   password: "",
-//   database: "clinic_system",
-// });
+
 const db = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: process.env.MYSQLDATABASE,
-  port: process.env.MYSQLPORT,
+  port: Number(process.env.DB_PORT),
 });
 
-// db.connect((err) => {
-//   if (err) {
-//     console.error("❌ DB connection failed:", err);
-//     return;
-//   }
-//   console.log("✅ Connected to MySQL (clinic_system)");
-// });
+
 db.connect((err) => {
   if (err) {
-    console.error("❌ DB Error:", err);
-    return;
+    console.error("❌ DB ERROR:", err);
+  } else {
+    console.log("✅ Connected to Railway MySQL");
   }
-  console.log("✅ MySQL Connected");
 });
 
 /* ============================================================
