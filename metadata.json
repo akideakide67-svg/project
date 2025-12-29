@@ -1,0 +1,7 @@
+{
+  "name": "Stylish Clinic Management System",
+  "description": "A modern and stylish Clinic Management System with separate views for Secretaries, Doctors, and Patients. It allows for managing patient records, appointments, and generating medical reports.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
