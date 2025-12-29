@@ -9,24 +9,39 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = 5050;
+const PORT = process.env.PORT || 5050;
+
 
 /* ============================================================
    DATABASE CONNECTION
 ============================================================ */
+// const db = mysql.createConnection({
+//   host: "127.0.0.1",
+//   user: "root",
+//   password: "",
+//   database: "clinic_system",
+// });
 const db = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "",
-  database: "clinic_system",
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT,
 });
 
+// db.connect((err) => {
+//   if (err) {
+//     console.error("❌ DB connection failed:", err);
+//     return;
+//   }
+//   console.log("✅ Connected to MySQL (clinic_system)");
+// });
 db.connect((err) => {
   if (err) {
-    console.error("❌ DB connection failed:", err);
+    console.error("❌ DB Error:", err);
     return;
   }
-  console.log("✅ Connected to MySQL (clinic_system)");
+  console.log("✅ MySQL Connected");
 });
 
 /* ============================================================
