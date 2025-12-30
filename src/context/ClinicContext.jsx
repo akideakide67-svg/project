@@ -669,17 +669,62 @@ export const ClinicProvider = ({ children }) => {
 
   /* ================= APPOINTMENT CRUD ================= */
   const updateAppointment = async (appointment) => {
+    // Ensure all required fields are present and valid
+    // Handle both camelCase and snake_case property names
+    const patient_id = appointment.patientId || appointment.patient_id;
+    const user_id = appointment.userId || appointment.user_id || null;
+    const status = appointment.status || "Normal";
+    const note = appointment.note || appointment.observation || "";
+
+    // Normalize date to YYYY-MM-DD format (same as bookAppointment)
+    const normalizedDate = normalizeDate(appointment.date);
+    if (!normalizedDate) {
+      console.error('[updateAppointment] Invalid date format:', appointment.date);
+      throw new Error("Invalid date format. Date must be in YYYY-MM-DD format.");
+    }
+
+    // Normalize time to HH:MM format (same as bookAppointment)
+    const normalizedTime = typeof appointment.time === 'string' 
+      ? appointment.time.slice(0, 5) 
+      : String(appointment.time || '').slice(0, 5);
+    
+    // Validate time format
+    if (!/^\d{2}:\d{2}$/.test(normalizedTime)) {
+      console.error('[updateAppointment] Invalid time format:', appointment.time);
+      throw new Error("Invalid time format. Time must be in HH:MM format.");
+    }
+
+    // Validate required fields before sending to backend
+    if (!patient_id) {
+      console.error('[updateAppointment] Missing patient_id:', appointment);
+      throw new Error("patient_id is required to update appointment");
+    }
+    if (!appointment.id) {
+      console.error('[updateAppointment] Missing appointment id:', appointment);
+      throw new Error("appointment id is required to update appointment");
+    }
+
+    // Log the payload being sent for debugging
+    const payload = {
+      patient_id,
+      user_id,
+      date: normalizedDate,
+      time: normalizedTime,
+      status,
+      note,
+    };
+    console.log('[updateAppointment] Sending PUT request:', {
+      url: `${API}/appointments/${appointment.id}`,
+      payload,
+      originalAppointment: appointment,
+      normalizedDate,
+      normalizedTime
+    });
+
     const data = await fetchJSON(`${API}/appointments/${appointment.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        patient_id: appointment.patientId || appointment.patient_id,
-        user_id: appointment.userId || appointment.user_id,
-        date: appointment.date,
-        time: appointment.time,
-        status: appointment.status || "Normal",
-        note: appointment.note || appointment.observation || "",
-      }),
+      body: JSON.stringify(payload),
     });
     setAppointments(prev => prev.map(a => a.id === appointment.id ? { ...data, patientId: data.patient_id } : a));
     return data;
