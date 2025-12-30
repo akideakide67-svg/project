@@ -7,8 +7,7 @@ import Modal from '../components/Modal';
 import { Plus, UserPlus, Trash2, Edit, Settings, FileText, Pill, TestTube2, Heart, Search, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { formatDate, formatDateTime, formatDateLong, formatDateForInput } from '../utils/dateFormatter';
-
-const API_BASE_URL = 'http://localhost:5050';
+import { API as API_BASE_URL } from '../utils/api';
 
 const SecretaryPage = () => {
     const clinic = useClinic();

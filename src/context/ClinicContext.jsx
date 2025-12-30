@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { API } from "../utils/api";
 
-const API = "http://localhost:5050";
 const ClinicContext = createContext(undefined);
 
 export const ClinicProvider = ({ children }) => {

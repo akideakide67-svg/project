@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { formatDate, formatDateTime, formatDateLong, normalizeDateToYMD, formatDateDDMMYYYY } from '../utils/dateFormatter';
 import { FileText } from 'lucide-react';
+import { API } from '../utils/api';
 
 const PatientAppointmentItem = ({ appointment }) => {
     const { appointmentMedications, causes, documents } = useClinic();
@@ -123,7 +124,7 @@ const PatientAppointmentItem = ({ appointment }) => {
                                         {appointmentDocuments.map(d => (
                                             <a
                                                 key={d.id}
-                                                href={`http://localhost:5050/documents/${d.id}/pdf`}
+                                                href={`${API}/documents/${d.id}/pdf`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="w-full text-left p-2 bg-slate-100 hover:bg-slate-200 rounded-md text-sm flex items-center space-x-2 cursor-pointer transition-colors"

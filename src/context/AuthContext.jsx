@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
+import { API } from "../utils/api";
 
-const API = "http://localhost:5050";
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
